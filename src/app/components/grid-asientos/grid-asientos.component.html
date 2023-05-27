@@ -1,0 +1,16 @@
+<div>
+  <table>
+    <ng-container *ngFor="let i of Array(is); let fila = index">
+      <tr>
+        <ng-container *ngFor="let j of Array(js); let columna = index">
+          <td>
+            <div>
+              <app-asiento-palco [information]="{fila,columna,estado,evento}"></app-asiento-palco>
+            </div>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-container>
+  </table>
+
+</div>

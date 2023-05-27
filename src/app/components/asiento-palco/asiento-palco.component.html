@@ -1,0 +1,10 @@
+<div *ngIf="information.estado !== 'inexistente'" class="asiento"
+     (click)="cambiarEstado()"
+     [style.backgroundColor]="information.estado === 'ocupado' ? 'red' : information.zona.hexaColor">
+</div>
+
+
+<div *ngIf="information.estado === 'inexistente'" class="inexistente" >
+</div>
+
+  

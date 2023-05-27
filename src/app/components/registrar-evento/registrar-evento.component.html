@@ -1,0 +1,120 @@
+<mat-stepper [linear]="isLinear" #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Información general</ng-template>
+            <mat-form-field>
+                <mat-label>Ingresa el nombre del evento</mat-label>
+                <input matInput placeholder="" formControlName="nombre" required>
+            </mat-form-field><br>
+            <mat-form-field>
+                <mat-label>Ingresa la cantidad de filas</mat-label>
+                <input matInput type="number" placeholder="" formControlName="filas" required>
+            </mat-form-field><br>
+            <mat-form-field>
+                <mat-label>Ingresa la cantidad de columnas</mat-label>
+                <input matInput type="number" placeholder="" formControlName="columnas" required>
+            </mat-form-field><br>
+            <div>
+                <button mat-button matStepperNext (click)="asignar()">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+        <div class="row">
+
+
+            <form [formGroup]="secondFormGroup" class="col">
+                <ng-template matStepLabel>Zonas</ng-template>
+                <mat-form-field>
+                    <mat-label>Ingresa el nombre de la zona </mat-label>
+                    <input matInput placeholder="" formControlName="nombreZona">
+                </mat-form-field><br>
+                <mat-form-field>
+                    <mat-label>Selecciona el color de la zona </mat-label>
+                    <input matInput formControlName="hexaColor" [ngxMatColorPicker]="picker" readonly>
+                    <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
+                    <ngx-mat-color-picker #picker [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
+                </mat-form-field>
+                <br>
+                <a *ngIf="!editing"><img src="../../../assets/mas.png" width="50" (click)="anadirZona()"></a>
+                <a *ngIf="editing"><img src="../../../assets/cheque.png" width="50" (click)="GuardarCambiosZona()"></a>
+                <br><br><br>
+                <div>
+                    <button mat-button (click)="NextZonas()">Next</button>
+                </div>
+            </form>
+            <table class="table col">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Color</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let zona of zonas; let i=index">
+                        <td>{{ zona.nombreZona }}</td>
+                        <td>
+                            <div [style.backgroundColor]="zona.hexaColor" style="width: 20px; height: 20px;"></div>
+                        </td>
+                        <td><img (click)="editarZona(i)" src="../../../assets/editar.png" width="20"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Mapa</ng-template>
+        <div class="col">
+            <form [formGroup]="SelectZonas">
+                <mat-form-field>
+                  <mat-label>Seleccionar zona</mat-label>
+                  <mat-select matNativeControl formControlName="zonaSeleccionada">
+                    <mat-option [value]="'white'">Libre</mat-option>
+                    <mat-option *ngFor="let zona of zonas" [value]="zona">{{ zona.nombreZona }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </form>
+              
+        </div>
+        <div class="row">
+            <div class="col mapa">
+                <table>
+                    <thead>
+                      <tr>
+                        <th></th> <!-- Espacio en blanco para la esquina superior izquierda -->
+                        <ng-container *ngFor="let j of Array(firstFormGroup.value.columnas); let columna = index">
+                          <th (click)="seleccionarColumna(columna)">{{ columna }}</th>
+                        </ng-container>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let i of Array(firstFormGroup.value.filas); let fila = index">
+                        <tr>
+                          <th (click)="seleccionarFila(fila)">{{ fila }}</th>
+                          <ng-container *ngFor="let j of Array(firstFormGroup.value.columnas); let columna = index">
+                            <td>
+                              <div>
+                                <div class="asiento" [style.backgroundColor]="asientoLibre[fila][columna]['hexaColor']" (click)="cambiarEstadoAsiento(fila, columna)">
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                  
+            </div>
+
+
+
+
+        </div>
+        <div>
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-button (click)="submit()">Enviar</button>
+        </div>
+    </mat-step>
+</mat-stepper>

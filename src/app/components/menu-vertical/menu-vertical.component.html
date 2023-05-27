@@ -1,0 +1,24 @@
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches" *ngIf="shouldRun">
+    <mat-toolbar color="primary" class="example-toolbar">
+      <a #menu mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></a>
+      <h1 class="example-app-name">MyTicket</h1>
+      
+    </mat-toolbar>
+  
+    <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+      <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+        fixedTopGap="56">
+        <mat-nav-list>
+          <a ><a mat-list-item routerLink="/eventos">Eventos</a></a>
+          <a ><a mat-list-item routerLink="/registrar">Registrar eventos</a></a>
+          
+          
+        </mat-nav-list>
+      </mat-sidenav>
+  
+      <mat-sidenav-content>
+  
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>

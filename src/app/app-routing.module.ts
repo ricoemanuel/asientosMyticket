@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-const routes: Routes = [];
+import {GridAsientosComponent} from '../app/components/grid-asientos/grid-asientos.component'
+import {RegistrarEventoComponent} from '../app/components/registrar-evento/registrar-evento.component'
+import {ListaEventosComponent} from '../app/components/lista-eventos/lista-eventos.component'
+const routes: Routes = [
+  { path: 'eventos', component: ListaEventosComponent },
+  { path: 'registrar', component: RegistrarEventoComponent },
+  { path: 'eventos/:id', component: GridAsientosComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

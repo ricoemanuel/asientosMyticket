@@ -1,0 +1,17 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th>Nombre del evento</th>
+        <th>Filas</th>
+        <th>Columnas</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="evento" *ngFor="let evento of eventos" (click)="abrirEvento(evento.id)">
+            <td >{{ evento.nombre }}</td>
+            <td>{{ evento.filas }}</td>
+            <td>{{ evento.columnas }}</td>
+          </tr>
+    </tbody>
+  </table>
+  
