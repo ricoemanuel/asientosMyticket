@@ -23,6 +23,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { LoginComponent } from './components/login/login.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,7 @@ import {MatSelectModule} from '@angular/material/select';
     MenuVerticalComponent,
     RegistrarEventoComponent,
     ListaEventosComponent,
+    LoginComponent,
     
   ],
   imports: [
@@ -47,11 +51,13 @@ import {MatSelectModule} from '@angular/material/select';
     MatSidenavModule,
     MatListModule,
     MatSelectModule,
+    MatMenuModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     BrowserAnimationsModule,
-    MatStepperModule
+    MatStepperModule,
+    ModalModule.forRoot()
   ],
   providers: [{ provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }],
   bootstrap: [AppComponent]

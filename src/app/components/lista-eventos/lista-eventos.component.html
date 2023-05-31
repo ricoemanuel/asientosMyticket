@@ -1,17 +1,35 @@
 <table class="table">
-    <thead>
-      <tr>
-        <th>Nombre del evento</th>
-        <th>Filas</th>
-        <th>Columnas</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="evento" *ngFor="let evento of eventos" (click)="abrirEvento(evento.id)">
-            <td >{{ evento.nombre }}</td>
-            <td>{{ evento.filas }}</td>
-            <td>{{ evento.columnas }}</td>
-          </tr>
-    </tbody>
-  </table>
-  
+  <thead>
+    <tr>
+      <th>Nombre del evento</th>
+      <th>Filas</th>
+      <th>Columnas</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    <tr mat-icon-button [matMenuTriggerFor]="menu" class="evento" *ngFor="let evento of eventos; let i = index">
+      
+        
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="abrirEvento(evento.id)">
+          <mat-icon>event_seat</mat-icon>
+          <span>Mapa</span>
+        </button>
+        <button disabled mat-menu-item>
+          <mat-icon>bar_chart</mat-icon>
+          <span>Mis ventas</span>
+        </button>
+        <button disabled mat-menu-item>
+          <mat-icon>attach_money</mat-icon>
+          <span>Ventas generales</span>
+        </button>
+      </mat-menu>
+    
+      <td>{{ evento.nombre }}</td>
+      <td>{{ evento.filas }}</td>
+      <td>{{ evento.columnas }}</td>
+    </tr>
+    
+  </tbody>
+</table>

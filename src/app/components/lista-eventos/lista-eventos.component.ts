@@ -8,10 +8,12 @@ import { Router } from '@angular/router';
 })
 export class ListaEventosComponent implements OnInit{
   eventos:any[]=[]
+  lista:boolean[]=[]
   constructor(private asientoService: FirebaseFirestoreService,private router: Router){}
   async ngOnInit(): Promise<void> {
     let eventos=await this.asientoService.getEventos()
     eventos.forEach(evento=>{
+      this.lista.push(false);
       this.eventos=evento
     })
     
@@ -19,5 +21,6 @@ export class ListaEventosComponent implements OnInit{
   abrirEvento(id:string){
     this.router.navigate(['eventos', id]);
   }
+ 
 
 }

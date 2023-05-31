@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseFirestoreService } from 'src/app/services/firebase.firestore.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-grid-asientos',
   templateUrl: './grid-asientos.component.html',
@@ -13,7 +13,7 @@ export class GridAsientosComponent implements OnInit{
   estado:string="inexistente"
   evento:string=""
   zona={'hexaColor':'white','nombreZona':'libre'}
-  constructor(private asientoService: FirebaseFirestoreService,private route: ActivatedRoute){}
+  constructor(private asientoService: FirebaseFirestoreService,private route: ActivatedRoute,private router: Router){}
   async ngOnInit(): Promise<void> {
     this.route.params.subscribe(params => {
       this.evento = params['id'];
@@ -33,5 +33,7 @@ export class GridAsientosComponent implements OnInit{
     }
     return array
   }
-  
+  back(){
+    this.router.navigate(['eventos'])
+  }
 }

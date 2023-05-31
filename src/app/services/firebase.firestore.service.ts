@@ -39,12 +39,12 @@ export class FirebaseFirestoreService {
     });
   }
   actualizarAsiento(asiento:any){
-    const entradaRef=doc(this.firestore,"asientos",`${asiento.fila}${asiento.columna}${asiento.evento}`)
+    const entradaRef=doc(this.firestore,"asientos",`f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
     setDoc(entradaRef,asiento)
   }
   setAsiento(asiento:any){
-    const entradaRef=doc(this.firestore,"asientos",`${asiento.fila}${asiento.columna}${asiento.evento}`)
-    setDoc(entradaRef,asiento)
+    const entradaRef=doc(this.firestore,"asientos",`f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
+    return setDoc(entradaRef,asiento)
   }
   
   getEventos() {
@@ -64,43 +64,10 @@ export class FirebaseFirestoreService {
     
     return undefined;
   }
-  // 
-
-  // }
-  // editEntrada(entrada:any,id:string){
-  //   const entradaRef=doc(this.firestore,"entradas",id)
-  //   setDoc(entradaRef,entrada)
-  // }
-  // getUsuarios(id:any){
-  //   const usuarioRef=doc(this.firestore,"usuarios",id)
-  //   return getDoc(usuarioRef)
-  // }
-  // getEntradasFalse(){
-  //   const entradaRef=collection(this.firestore,`entradas`)
-  //   return getDocs(query(entradaRef,where("estado","==",false)))
-  // }
-  // getGeneral(){
-  //   const entradaRef=collection(this.firestore,`entradas`)
-  //   return getDocs(query(entradaRef,where("zona","==","general"),where("estado","==",false)))
-  // }
-  // getVip(){
-  //   const entradaRef=collection(this.firestore,`entradas`)
-  //   return getDocs(query(entradaRef,where("zona","==","vip"),where("estado","==",false)))
-  // }
-  // getMeet(){
-  //   const entradaRef=collection(this.firestore,`entradas`)
-  //   return getDocs(query(entradaRef,where("zona","==","meet"),where("estado","==",false)))
-  // }
-  // getEntradasTrueVip(){
-  //   const entradaRef=collection(this.firestore,`entradas`)
-  //   return getDocs(query(entradaRef,where("zona","==","vip"),where("estado","==",true)))
-  // }
-  // getEntradasTrueGeneral(){
-  //   const entradaRef=collection(this.firestore,`entradas`)
-  //   return getDocs(query(entradaRef,where("zona","==","general"),where("estado","==",true)))
-  // }
-  // getentradaByCedula(cedula:string){
-  //   const entradaRef=collection(this.firestore,`entradas`)
-  //   return getDocs(query(entradaRef,where("cedula","==",cedula)))
-  // }
+  getAsientosNull(){
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('vendedor', '==', 'null'), where('estado', '==', 'ocupado'));
+    return getDocs(q);
+  }
+ 
 }

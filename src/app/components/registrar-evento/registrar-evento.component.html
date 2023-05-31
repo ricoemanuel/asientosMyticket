@@ -15,7 +15,7 @@
                 <input matInput type="number" placeholder="" formControlName="columnas" required>
             </mat-form-field><br>
             <div>
-                <button mat-button matStepperNext (click)="asignar()">Next</button>
+                <button mat-button matStepperNext class="btn btn-secondary" (click)="asignar()">Siguiente</button>
             </div>
         </form>
     </mat-step>
@@ -30,6 +30,10 @@
                     <input matInput placeholder="" formControlName="nombreZona">
                 </mat-form-field><br>
                 <mat-form-field>
+                  <mat-label>Ingresa el precio de la zona</mat-label>
+                  <input matInput placeholder="" formControlName="precioZona">
+              </mat-form-field><br>
+                <mat-form-field>
                     <mat-label>Selecciona el color de la zona </mat-label>
                     <input matInput formControlName="hexaColor" [ngxMatColorPicker]="picker" readonly>
                     <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
@@ -40,13 +44,14 @@
                 <a *ngIf="editing"><img src="../../../assets/cheque.png" width="50" (click)="GuardarCambiosZona()"></a>
                 <br><br><br>
                 <div>
-                    <button mat-button (click)="NextZonas()">Next</button>
+                    <button mat-button class="btn btn-secondary" (click)="NextZonas()">Siguiente</button>
                 </div>
             </form>
             <table class="table col">
                 <thead>
                     <tr>
                         <th>Nombre</th>
+                        <th>Precio</th>
                         <th>Color</th>
                         <th>Editar</th>
                     </tr>
@@ -54,6 +59,7 @@
                 <tbody>
                     <tr *ngFor="let zona of zonas; let i=index">
                         <td>{{ zona.nombreZona }}</td>
+                        <td>{{ zona.precioZona }}</td>
                         <td>
                             <div [style.backgroundColor]="zona.hexaColor" style="width: 20px; height: 20px;"></div>
                         </td>
@@ -113,8 +119,8 @@
 
         </div>
         <div>
-            <button mat-button matStepperPrevious>Atrás</button>
-            <button mat-button (click)="submit()">Enviar</button>
+            <button mat-button class="btn btn-secondary" matStepperPrevious>Atrás</button>
+            <button mat-button class="btn btn-success" (click)="submit()">Enviar</button>
         </div>
     </mat-step>
 </mat-stepper>

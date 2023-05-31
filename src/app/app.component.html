@@ -1,2 +1,6 @@
-<app-menu-vertical></app-menu-vertical>
-  
+<div *ngIf="logged">
+    <app-menu-vertical></app-menu-vertical>
+</div>
+<div *ngIf="!logged">
+    <app-login></app-login>
+</div>

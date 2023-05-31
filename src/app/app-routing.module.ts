@@ -7,7 +7,9 @@ const routes: Routes = [
   { path: 'eventos', component: ListaEventosComponent },
   { path: 'registrar', component: RegistrarEventoComponent },
   { path: 'eventos/:id', component: GridAsientosComponent },
+  { path: '', redirectTo: '/eventos', pathMatch: 'full' }, // Ruta vacía redirige a '/eventos'
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
