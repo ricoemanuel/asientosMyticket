@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FirebaseFirestoreService } from 'src/app/services/firebase.firestore.service';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FirebaseFirestoreService } from 'src/app/services/firebase.firestore.service';
+
 @Component({
-  selector: 'app-grid-asientos',
-  templateUrl: './grid-asientos.component.html',
-  styleUrls: ['./grid-asientos.component.css']
+  selector: 'app-vistacliente',
+  templateUrl: './vistacliente.component.html',
+  styleUrls: ['./vistacliente.component.css']
 })
-export class GridAsientosComponent implements OnInit{
-  
+export class VistaclienteComponent {
   is:number=0
   js:number=0
   estado:string="inexistente"
@@ -19,11 +19,13 @@ export class GridAsientosComponent implements OnInit{
       this.evento = params['id'];
     });
     let evento=await this.asientoService.getEvento(this.evento)
+   
     if(evento!=undefined){
       evento['zonas'].forEach((element: { [x: string]: any; }) => {
         localStorage.setItem(element['nombreZona'],'0')
         
       });
+      
       this.is=evento["filas"]
       this.js=evento["columnas"]
     }
@@ -37,7 +39,5 @@ export class GridAsientosComponent implements OnInit{
     }
     return array
   }
-  back(){
-    this.router.navigate(['eventos'])
-  }
+  
 }

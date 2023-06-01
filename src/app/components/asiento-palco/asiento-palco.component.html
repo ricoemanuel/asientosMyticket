@@ -1,6 +1,8 @@
-<div *ngIf="information.estado !== 'inexistente'" class="asiento" (click)="openModal(template)"
+<div *ngIf="!map">
+  <div *ngIf="information.estado !== 'inexistente'" class="asiento" (click)="openModal(template)"
   [ngClass]="{'asiento': true, 'ocupado': information.estado === 'ocupado'}"
   [style.backgroundColor]="information.estado === 'ocupado' ? '#ccc' : information.zona.hexaColor">
+  <p>{{cont1}}</p>
 </div>
 
 
@@ -41,9 +43,9 @@
         <mat-error *ngIf="formulario.controls.tipo.hasError('required')">Método de pago es requerido</mat-error>
       </mat-form-field><br>
       <mat-form-field>
-        <mat-label>Cantiad del pago</mat-label>
+        <mat-label>Cantidad del pago</mat-label>
         <input type="number" matInput placeholder="" formControlName="dinero">
-        <mat-error *ngIf="formulario.controls.correo.hasError('required')">Cantiad del pago es requerido</mat-error>
+        <mat-error *ngIf="formulario.controls.correo.hasError('required')">Cantidad del pago es requerido</mat-error>
       </mat-form-field><br>
       <div class="mx-auto" style="width:200px;">
         <button mat-raised-button class="btn btn-success" (click)="Reservar()">Enviar</button>
@@ -55,3 +57,15 @@
   </div>
 
 </ng-template>
+</div>
+<div *ngIf="map">
+  <div *ngIf="information.estado !== 'inexistente'" class="asiento"
+  [ngClass]="{'asiento': true, 'ocupado': information.estado === 'ocupado'}"
+  [style.backgroundColor]="information.estado === 'ocupado' ? '#ccc' : information.zona.hexaColor">
+  <p>{{cont1}}</p>
+</div>
+
+
+<div *ngIf="information.estado === 'inexistente'" class="inexistente">
+</div>
+</div>

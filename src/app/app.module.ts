@@ -26,6 +26,8 @@ import {MatSelectModule} from '@angular/material/select';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LoginComponent } from './components/login/login.component';
 import {MatMenuModule} from '@angular/material/menu';
+import { VistaclienteComponent } from './components/vistacliente/vistacliente.component';
+import { RegistrarVendedoresComponent } from './components/registrar-vendedores/registrar-vendedores.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import {MatMenuModule} from '@angular/material/menu';
     RegistrarEventoComponent,
     ListaEventosComponent,
     LoginComponent,
+    VistaclienteComponent,
+    RegistrarVendedoresComponent,
     
   ],
   imports: [

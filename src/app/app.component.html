@@ -1,6 +1,11 @@
-<div *ngIf="logged">
-    <app-menu-vertical></app-menu-vertical>
+<div *ngIf="!map">
+    <div *ngIf="logged">
+        <app-menu-vertical></app-menu-vertical>
+    </div>
+    <div *ngIf="!logged">
+        <app-login></app-login>
+    </div>
 </div>
-<div *ngIf="!logged">
-    <app-login></app-login>
+<div *ngIf="map">
+    <router-outlet></router-outlet>
 </div>
