@@ -28,6 +28,7 @@ import { LoginComponent } from './components/login/login.component';
 import {MatMenuModule} from '@angular/material/menu';
 import { VistaclienteComponent } from './components/vistacliente/vistacliente.component';
 import { RegistrarVendedoresComponent } from './components/registrar-vendedores/registrar-vendedores.component';
+import { EditEventComponent } from './components/edit-event/edit-event.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { RegistrarVendedoresComponent } from './components/registrar-vendedores/
     LoginComponent,
     VistaclienteComponent,
     RegistrarVendedoresComponent,
+    EditEventComponent,
     
   ],
   imports: [

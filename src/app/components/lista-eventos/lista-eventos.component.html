@@ -16,13 +16,13 @@
           <mat-icon>event_seat</mat-icon>
           <span>Mapa</span>
         </button>
-        <button disabled mat-menu-item>
-          <mat-icon>bar_chart</mat-icon>
-          <span>Mis ventas</span>
+        <button mat-menu-item (click)="editarEvento(evento.id)">
+          <mat-icon>edit</mat-icon>
+          <span>Editar</span>
         </button>
-        <button disabled mat-menu-item>
-          <mat-icon>attach_money</mat-icon>
-          <span>Ventas generales</span>
+        <button  mat-menu-item (click)="anadirVendedor(template,evento.id)">
+          <mat-icon>person_add</mat-icon>
+          <span>Agregar vendedor</span>
         </button>
       </mat-menu>
     
@@ -33,3 +33,23 @@
     
   </tbody>
 </table>
+<ng-template #template>
+  <div class="contentModal">
+    <h1>Información del vendedor</h1>
+    <form [formGroup]="formulario">
+      <mat-form-field>
+        <mat-label>Nombre del vendedor</mat-label>
+        <input matInput placeholder="" formControlName="nombre">
+        <mat-error *ngIf="formulario.controls.nombre.hasError('required')">Nombre del cliente es requerido</mat-error>
+      </mat-form-field><br>
+      
+      <div class="mx-auto" style="width:200px;">
+        <button mat-raised-button class="btn btn-success" (click)="GuardarVendedor()">Guardar</button>
+        
+      </div>
+
+    </form>
+
+  </div>
+
+</ng-template>

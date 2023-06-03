@@ -4,7 +4,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { DocumentData } from 'firebase/firestore';
 import Swal from 'sweetalert2';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-asiento-palco',
@@ -21,10 +21,11 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
     tipo: ['', Validators.required],
     dinero: ['', Validators.required],
   });
-
+  vendedor: FormControl = new FormControl('');
   map: boolean = false;
   cont1: number = 0
   firstTime: boolean = true
+  vendedores: any[] = []
   constructor(private router: Router, private formBuilder: FormBuilder, private asientoService: FirebaseFirestoreService, private modalService: BsModalService) { }
 
   async ngOnInit(): Promise<void> {
@@ -32,9 +33,10 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
       this.map = true;
     }
     this.information$ = await this.asientoService.getAsientoRealtime(this.information.fila, this.information.columna, this.information.evento);
-    this.information$.forEach(asiento => {
+    this.information$.forEach(async asiento => {
       if (asiento.length > 0) {
         this.information = asiento[0]
+
         let cont2 = parseInt(localStorage.getItem(this.information['zona']['nombreZona']) ?? '0');
         cont2++
         if (this.firstTime) {
@@ -42,6 +44,7 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
           this.cont1 = cont2
         }
         localStorage.setItem(this.information['zona']['nombreZona'], cont2.toString());
+        this.vendedores = (await this.asientoService.getVendedores(this.information.evento)).docs
         if (this.information.vendedor != "null") {
           console.log(this.information)
           this.formulario.setValue({
@@ -51,11 +54,12 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
             tipo: this.information["cliente"]["tipo"],
             dinero: this.information["cliente"]["dinero"],
           })
-          
+          this.vendedor.patchValue(this.information.vendedor)
         }
+
       }
     })
-    
+
 
 
 
@@ -91,24 +95,34 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
 
   }
   cancelar(template: TemplateRef<any>) {
-    if(this.information['vendedor']!="null"){
+    if (this.information['vendedor'] != "null") {
       if (this.information['estado'] != "ocupado") {
         this.cambiarEstado();
-  
+
       }
-      
-    }else{
+
+    } else {
       this.cambiarEstado();
     }
     this.modalRef?.hide()
 
   }
   Reservar() {
+   
+    if (this.vendedor.value != "" && this.vendedor.value != undefined && this.vendedor.value !="oXTcrguOoYZ5q18dIFyeCtjQvVs2") {
+      this.information.cliente = this.formulario.value
+      this.information.vendedor = this.vendedor.value
+      this.asientoService.actualizarAsiento(this.information);
+      this.modalRef?.hide();
+    }else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debes seleccionar al menos un vendedor'
 
-    this.information.cliente = this.formulario.value
-    this.information.vendedor = localStorage.getItem("user")
-    this.asientoService.actualizarAsiento(this.information);
-    this.modalRef?.hide();
+      })
+    }
+
 
   }
 }
