@@ -21,6 +21,7 @@ export class EditEventComponent implements OnInit, AfterViewInit {
     nombre: ['', Validators.required],
     columnas: ['', Validators.required],
     filas: ['', Validators.required],
+    descripcion: ['', Validators.required],
   });
   @ViewChild('stepper') stepper: MatStepper | undefined;
   secondFormGroup = this._formBuilder.group({
@@ -52,6 +53,7 @@ export class EditEventComponent implements OnInit, AfterViewInit {
     this.firstFormGroup.get("nombre")?.patchValue(this.evento.nombre)
     this.firstFormGroup.get("filas")?.patchValue(this.evento.filas)
     this.firstFormGroup.get("columnas")?.patchValue(this.evento.columnas)
+    this.firstFormGroup.get("descripcion")?.patchValue(this.evento.descripcion)
 
     this.asignar()
 
@@ -101,6 +103,7 @@ export class EditEventComponent implements OnInit, AfterViewInit {
     this.evento.filas=this.firstFormGroup.value.filas;
     this.evento.columnas=this.firstFormGroup.value.columnas;
     this.evento.nombre=this.firstFormGroup.value.nombre;
+    this.evento.descripcion=this.firstFormGroup.value.descripcion;
 
   }
   GuardarCambiosZona() {

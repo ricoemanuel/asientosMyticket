@@ -16,6 +16,7 @@ export class RegistrarEventoComponent implements OnInit {
     nombre: ['', Validators.required],
     columnas: ['', Validators.required],
     filas: ['', Validators.required],
+    descripcion: ['', Validators.required],
   });
   @ViewChild('stepper') stepper: MatStepper | undefined;
   secondFormGroup = this._formBuilder.group({
@@ -54,6 +55,7 @@ export class RegistrarEventoComponent implements OnInit {
       'columnas': this.firstFormGroup.value.columnas,
       'filas': this.firstFormGroup.value.filas,
       'nombre': this.firstFormGroup.value.nombre,
+      'descripcion': this.firstFormGroup.value.descripcion,
       'zonas': this.zonas
     }
     let evento = await this.asientoService.addEvento(obj)
