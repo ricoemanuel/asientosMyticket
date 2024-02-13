@@ -1,8 +1,8 @@
 <div *ngIf="!map">
   <div *ngIf="information.estado !== 'inexistente'" class="asiento" (click)="openModal(template)"
   [ngClass]="{'asiento': true, 'ocupado': information.estado === 'ocupado'}"
-  [style.backgroundColor]="information.estado === 'ocupado' ? '#ccc' : information.zona.hexaColor">
-  <p>{{cont1}}</p>
+  [style.backgroundColor]="information.estado === 'ocupado' ? '#ccc' : information.hexaColor">
+  <p>{{information.label}}</p>
 </div>
 
 
@@ -11,68 +11,13 @@
 
 
 <ng-template #template>
-  <div class="contentModal">
-    <h1>Información de venta</h1>
-    <form [formGroup]="formulario">
-      <mat-form-field>
-        <mat-label>Nombre del cliente</mat-label>
-        <input matInput placeholder="" formControlName="nombre">
-        <mat-error *ngIf="formulario.controls.nombre.hasError('required')">Nombre del cliente es requerido</mat-error>
-      </mat-form-field><br>
-      <mat-form-field>
-        <mat-label>Correo del cliente</mat-label>
-        <input matInput placeholder="" formControlName="correo">
-        <mat-error *ngIf="formulario.controls.correo.hasError('required')">Correo del cliente es requerido</mat-error>
-      </mat-form-field><br>
-      <mat-form-field>
-        <mat-label>Método de pago</mat-label>
-        <mat-select formControlName="metodo">
-          <mat-option value="">Seleccione un método de pago</mat-option>
-          <mat-option value="efectivo">Efectivo</mat-option>
-          <mat-option value="transferencia">Transferencia</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formulario.controls.metodo.hasError('required')">Método de pago es requerido</mat-error>
-      </mat-form-field><br>
-      <mat-form-field>
-        <mat-label>Tipo de venta</mat-label>
-        <mat-select formControlName="tipo">
-          <mat-option value="">Seleccione un tipo de venta</mat-option>
-          <mat-option value="Pago completo">Pago completo</mat-option>
-          <mat-option value="Pago parcial">Pago parcial</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formulario.controls.tipo.hasError('required')">Método de pago es requerido</mat-error>
-      </mat-form-field><br>
-      <mat-form-field>
-        <mat-label>Cantidad del pago</mat-label>
-        <input type="number" matInput placeholder="" formControlName="dinero">
-        <mat-error *ngIf="formulario.controls.correo.hasError('required')">Cantidad del pago es requerido</mat-error>
-      </mat-form-field><br>
-      <mat-form-field>
-        <mat-label>Vendedor</mat-label>
-        <mat-select [formControl]="vendedor">
-          <mat-option value="">Seleccione un vendedor</mat-option>
-          <mat-option *ngFor="let vendedor of vendedores" [value]="vendedor.id">
-            {{ vendedor.data().nombre }}
-          </mat-option>
-          
-        </mat-select>
-        <mat-error *ngIf="formulario.controls.tipo.hasError('required')">Método de pago es requerido</mat-error>
-      </mat-form-field><br>
-      <div class="mx-auto" style="width:200px;">
-        <button mat-raised-button class="btn btn-success" (click)="Reservar()">Enviar</button>
-        <button mat-raised-button class="btn btn-danger" (click)="cancelar(template)">Cancelar</button>
-      </div>
-
-    </form>
-
-  </div>
-
+  <button class="btn btn-danger button" (click)="liberar()">Liberar asiento</button>
 </ng-template>
 </div>
 <div *ngIf="map">
   <div *ngIf="information.estado !== 'inexistente'" class="asiento"
   [ngClass]="{'asiento': true, 'ocupado': information.estado === 'ocupado'}"
-  [style.backgroundColor]="information.estado === 'ocupado' ? '#ccc' : information.zona.hexaColor">
+  [style.backgroundColor]="information.estado === 'ocupado' ? '#ccc' : information.hexaColor">
   <p>{{cont1}}</p>
 </div>
 

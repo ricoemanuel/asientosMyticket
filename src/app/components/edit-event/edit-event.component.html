@@ -37,6 +37,10 @@
                   <mat-label>Ingresa el precio de la zona</mat-label>
                   <input matInput placeholder="" formControlName="precioZona">
               </mat-form-field><br>
+              <mat-form-field>
+                <mat-label>Ingresa el precio por persona adicional</mat-label>
+                <input matInput placeholder="" formControlName="persona">
+            </mat-form-field><br>
                 <mat-form-field>
                     <mat-label>Selecciona el color de la zona </mat-label>
                     <input matInput formControlName="hexaColor" [ngxMatColorPicker]="picker" readonly>
@@ -56,6 +60,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Precio</th>
+                        <th>Precio por persona</th>
                         <th>Color</th>
                         <th>Editar</th>
                     </tr>
@@ -64,6 +69,7 @@
                     <tr *ngFor="let zona of zonas; let i=index">
                         <td>{{ zona.nombreZona }}</td>
                         <td>{{ zona.precioZona }}</td>
+                        <td>{{ zona.persona }}</td>
                         <td>
                             <div [style.backgroundColor]="zona.hexaColor" style="width: 20px; height: 20px;"></div>
                         </td>
@@ -93,6 +99,7 @@
                 <table>
                     <thead>
                       <tr>
+                        <th></th>
                         <th></th> <!-- Espacio en blanco para la esquina superior izquierda -->
                         <ng-container *ngFor="let j of Array(firstFormGroup.value.columnas); let columna = index">
                           <th (click)="seleccionarColumna(columna)">{{ columna }}</th>
@@ -102,11 +109,13 @@
                     <tbody>
                       <ng-container *ngFor="let i of Array(firstFormGroup.value.filas); let fila = index">
                         <tr>
+                          <th><input (ngModelChange)="imprimir()" [(ngModel)]="labels[fila]" type="text" style="width: 40px;"></th>
                           <th (click)="seleccionarFila(fila)">{{ fila }}</th>
                           <ng-container *ngFor="let j of Array(firstFormGroup.value.columnas); let columna = index">
                             <td>
                               <div>
-                                <div class="asiento" [style.backgroundColor]="asientoLibre[fila][columna]['zona']['hexaColor']" (click)="cambiarEstadoAsiento(fila, columna)">
+                                <div class="asiento" [style.backgroundColor]="asientoLibre[fila][columna]['hexaColor']" (dblclick)="cambiarEstadoAsiento(fila, columna)">
+                                  <input [(ngModel)]="asientoLibre[fila][columna].label" (ngModelChange)="cambiarLabel(fila, columna)" *ngIf="asientoLibre[fila][columna].nombreZona!=='libre'" class="asiento_input"  style="width: 30px;">
                                 </div>
                               </div>
                             </td>

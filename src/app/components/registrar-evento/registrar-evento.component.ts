@@ -4,8 +4,6 @@ import { ThemePalette } from '@angular/material/core';
 import { MatStepper } from '@angular/material/stepper';
 import { FirebaseFirestoreService } from 'src/app/services/firebase.firestore.service';
 import Swal from 'sweetalert2';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-registrar-evento',
   templateUrl: './registrar-evento.component.html',
@@ -22,7 +20,7 @@ export class RegistrarEventoComponent implements OnInit {
   secondFormGroup = this._formBuilder.group({
     nombreZona: '',
     hexaColor: '',
-    precioZona:'',
+    precioZona: '',
   });
 
   SelectZonas = new FormGroup({
@@ -43,50 +41,52 @@ export class RegistrarEventoComponent implements OnInit {
 
   }
   async submit() {
-    Swal.fire({
-      icon: 'info',
-      title: 'Guardando asientos...',
-    });
-    for (let i = 0; i < this.zonas.length; i++) {
-      this.zonas[i]["hexaColor"] = '#' + this.zonas[i]["hexaColor"]['hex']
-    }
-    console.log(this.zonas)
-    let obj = {
-      'columnas': this.firstFormGroup.value.columnas,
-      'filas': this.firstFormGroup.value.filas,
-      'nombre': this.firstFormGroup.value.nombre,
-      'descripcion': this.firstFormGroup.value.descripcion,
-      'zonas': this.zonas
-    }
-    let evento = await this.asientoService.addEvento(obj)
-    let id = evento.id
-    if (this.firstFormGroup.value.filas != undefined && this.firstFormGroup.value.columnas != undefined) {
-      const totalFilas = parseInt(this.firstFormGroup.value.filas);
-      const totalColumnas = parseInt(this.firstFormGroup.value.columnas);
-      let asientosRegistrados = 0;
-
-      this.asientoLibre.forEach((fila, i) => {
-        fila.forEach((asiento, j) => {
-          if (asiento['nombreZona'] != 'libre') {
-            let objZona = { 'nombreZona': asiento['nombreZona'], 'hexaColor': asiento['hexaColor'] };
-            let objCliente = { 'nombre': 'null', 'correo': 'null', 'metodo': 'null', 'tipo': '','dinero':0  };
-            let asientoData = { 'estado': 'libre', 'fila': i, 'columna': j, 'evento': id, 'zona': objZona, 'cliente': objCliente,'vendedor':'null' };
-            this.asientoService.setAsiento(asientoData).then(() => {
-              asientosRegistrados++;
-              if (asientosRegistrados === totalFilas * totalColumnas) {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Guardado completado',
-                  text: 'Todos los asientos se han guardado exitosamente.',
-                  showConfirmButton: true
-                });
-              }
-            });
-          }
-        });
+    
+      Swal.fire({
+        icon: 'info',
+        title: 'Guardando asientos...',
       });
+      for (let i = 0; i < this.zonas.length; i++) {
+        this.zonas[i]["hexaColor"] = '#' + this.zonas[i]["hexaColor"]['hex']
+      }
+      console.log(this.zonas)
+      let obj = {
+        'columnas': this.firstFormGroup.value.columnas,
+        'filas': this.firstFormGroup.value.filas,
+        'nombre': this.firstFormGroup.value.nombre,
+        'descripcion': this.firstFormGroup.value.descripcion,
+        'zonas': this.zonas
+      }
+      let evento = await this.asientoService.addEvento(obj)
+      let id = evento.id
+      if (this.firstFormGroup.value.filas != undefined && this.firstFormGroup.value.columnas != undefined) {
+        const totalFilas = parseInt(this.firstFormGroup.value.filas);
+        const totalColumnas = parseInt(this.firstFormGroup.value.columnas);
+        let asientosRegistrados = 0;
 
-    }
+        this.asientoLibre.forEach((fila, i) => {
+          fila.forEach((asiento, j) => {
+            if (asiento['nombreZona'] != 'libre') {
+              let objZona = { 'nombreZona': asiento['nombreZona'], 'hexaColor': asiento['hexaColor'] };
+              let asientoData = { 'estado': 'libre', 'fila': i, 'columna': j, 'evento': id, 'nombreZona': objZona.nombreZona, 'hexaColor': objZona.hexaColor, 'clienteUser': 'null', 'clienteEstado': 'null' };
+              this.asientoService.setAsiento(asientoData).then(() => {
+                asientosRegistrados++;
+                if (asientosRegistrados === totalFilas * totalColumnas) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado completado',
+                    text: 'Todos los asientos se han guardado exitosamente.',
+                    showConfirmButton: true
+                  });
+                }
+              });
+            }
+          });
+        });
+
+      }
+    
+
   }
   Array(number: any): number[] {
     let array: number[] = []
@@ -147,11 +147,11 @@ export class RegistrarEventoComponent implements OnInit {
     this.EditingIndex = index
     let nombre = this.zonas[index]["nombreZona"]
     let hexa = this.zonas[index]["hexaColor"]
-    let precio=this.zonas[index]['precioZona']
+    let precio = this.zonas[index]['precioZona']
     this.secondFormGroup.setValue({
       nombreZona: nombre,
       hexaColor: hexa,
-      precioZona:precio
+      precioZona: precio
     })
     this.editing = true
   }

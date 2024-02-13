@@ -15,7 +15,7 @@ export class EditEventComponent implements OnInit, AfterViewInit {
   constructor(private route: ActivatedRoute, private _formBuilder: FormBuilder,
     private asientoService: FirebaseFirestoreService,private router: Router) {
   }
-
+  labels:string[]=[]
   eventoId: string = ""
   firstFormGroup = this._formBuilder.group({
     nombre: ['', Validators.required],
@@ -28,6 +28,7 @@ export class EditEventComponent implements OnInit, AfterViewInit {
     nombreZona: '',
     hexaColor: '',
     precioZona: '',
+    persona:''
   });
 
   SelectZonas = new FormGroup({
@@ -54,10 +55,20 @@ export class EditEventComponent implements OnInit, AfterViewInit {
     this.firstFormGroup.get("filas")?.patchValue(this.evento.filas)
     this.firstFormGroup.get("columnas")?.patchValue(this.evento.columnas)
     this.firstFormGroup.get("descripcion")?.patchValue(this.evento.descripcion)
-
+    
     this.asignar()
+    if(this.evento.labels){
+      this.labels=this.evento.labels
+    }else{
+    for(let i=0;i<this.evento.filas;i++){
+      this.labels.push('')
+    }
+    }
+    
 
-
+  }
+  imprimir(){
+    console.log(this.labels)
   }
   async ngAfterViewInit(): Promise<void> {
     Swal.fire({
@@ -67,7 +78,7 @@ export class EditEventComponent implements OnInit, AfterViewInit {
       showConfirmButton: true,
       confirmButtonText: 'Aceptar'
     });
-    
+
   }
   async asignar() {
     if (this.firstFormGroup.value.filas != undefined && this.firstFormGroup.value.columnas != undefined) {
@@ -75,35 +86,27 @@ export class EditEventComponent implements OnInit, AfterViewInit {
         this.asientoLibre[i] = [];
         for (let j = 0; j < parseInt(this.firstFormGroup.value.columnas); j++) {
           this.asientoLibre[i][j] = {
-            'cliente': {
-              'nombre': 'null',
-              'correo': 'null',
-              'tipo': 'null',
-              'metodo': 'null',
-              'dinero': 0
-            },
             'columna': j,
             'fila': i,
             'estado': 'libre',
-            'vendedor': 'null',
             'evento': this.eventoId,
-            'zona': {
-              'nombreZona': 'libre',
-              'hexaColor': 'white'
-            }
+            'nombreZona': 'libre',
+            'hexaColor': 'white',
+            'clienteUSer':'null',
+            'clienteEstado':'null'
           };
         }
       }
     }
     let asientos = await this.asientoService.getAsientosPorEvento(this.eventoId)
-    asientos.forEach(asiento => {
+    asientos.forEach((asiento: any) => {
       let data: any = asiento.data()
       this.asientoLibre[data.fila][data.columna] = data
     })
-    this.evento.filas=this.firstFormGroup.value.filas;
-    this.evento.columnas=this.firstFormGroup.value.columnas;
-    this.evento.nombre=this.firstFormGroup.value.nombre;
-    this.evento.descripcion=this.firstFormGroup.value.descripcion;
+    this.evento.filas = this.firstFormGroup.value.filas;
+    this.evento.columnas = this.firstFormGroup.value.columnas;
+    this.evento.nombre = this.firstFormGroup.value.nombre;
+    this.evento.descripcion = this.firstFormGroup.value.descripcion;
 
   }
   GuardarCambiosZona() {
@@ -117,12 +120,12 @@ export class EditEventComponent implements OnInit, AfterViewInit {
   }
   anadirZona() {
     this.zonas.push(this.secondFormGroup.value)
-    this.zonas[this.zonas.length-1].hexaColor=`#${this.zonas[this.zonas.length-1].hexaColor.hex}`
+    this.zonas[this.zonas.length - 1].hexaColor = `#${this.zonas[this.zonas.length - 1].hexaColor.hex}`
     console.log(this.zonas)
     this.secondFormGroup.reset()
   }
   NextZonas() {
-    this.evento.zonas=this.zonas
+    this.evento.zonas = this.zonas
     if (this.zonas.length > 0) {
       this.stepper?.next()
     } else {
@@ -140,10 +143,12 @@ export class EditEventComponent implements OnInit, AfterViewInit {
     let nombre = this.zonas[index]["nombreZona"]
     let hexa = this.zonas[index]["hexaColor"]
     let precio = this.zonas[index]['precioZona']
+    let persona=this.zonas[index]['persona']?this.zonas[index]['persona']:0
     this.secondFormGroup.setValue({
       nombreZona: nombre,
       hexaColor: hexa,
-      precioZona: precio
+      precioZona: precio,
+      persona
     })
     this.editing = true
     console.log(this.asientoLibre)
@@ -152,29 +157,21 @@ export class EditEventComponent implements OnInit, AfterViewInit {
     console.log(this.asientoLibre[fila][columna])
     if (this.SelectZonas.value.zonaSeleccionada != undefined) {
       if (this.SelectZonas.value.zonaSeleccionada != '') {
-        
+
         if (this.SelectZonas.value.zonaSeleccionada == 'white') {
-          this.asientoLibre[fila][columna]["zona"] = {
+          this.asientoLibre[fila][columna]["nombreZona"] = 'libre'
+          this.asientoLibre[fila][columna]["hexaColor"] = 'white'
 
-            'nombreZona': 'libre',
-            'hexaColor': 'white'
-
-          };
-          
         } else {
-          
-          if (this.asientoLibre[fila][columna]["zona"]['nombreZona'] == "libre") {
-            
-            this.asientoLibre[fila][columna]["zona"] = this.SelectZonas.value.zonaSeleccionada
-            
+
+          if (this.asientoLibre[fila][columna]['nombreZona'] == "libre") {
+
+            this.asientoLibre[fila][columna]["nombreZona"] = (this.SelectZonas.value.zonaSeleccionada as any).nombreZona
+            this.asientoLibre[fila][columna]["hexaColor"] = (this.SelectZonas.value.zonaSeleccionada as any).hexaColor
           } else {
-            
-            this.asientoLibre[fila][columna]["zona"] = {
 
-              'nombreZona': 'libre',
-              'hexaColor': 'white'
-
-            };
+            this.asientoLibre[fila][columna]["nombreZona"] = 'libre'
+            this.asientoLibre[fila][columna]["hexaColor"] = 'white'
           }
 
 
@@ -214,29 +211,43 @@ export class EditEventComponent implements OnInit, AfterViewInit {
       text: 'Guardando los cambios',
       showConfirmButton: false,
     });
-    this.asientoService.setEvento(this.eventoId,this.evento);
-    let asientosRegistrados=0
-    this.asientoLibre.forEach(async fila=>{
-      fila.forEach(async asiento=>{
-        if(asiento.zona.nombreZona!="libre"){
+
+    this.evento.labels=this.labels
+    let asientosRegistrados = 0
+    this.evento.zonas.forEach((element: any) => {
+      element.arrayZonas = []
+    });
+    this.asientoLibre.forEach(async fila => {
+      fila.forEach(async asiento => {
+        if (asiento.nombreZona != "libre") {
+          let index = this.evento.zonas.findIndex((zona:any) => {
+            return zona.nombreZona === asiento.nombreZona;
+          });          
+          this.evento.zonas[index].arrayZonas.push({ fila: asiento.fila, columna: asiento.columna,zona:asiento.nombreZona })
           await this.asientoService.setAsiento(asiento)
-        }else{
+        } else {
           await this.asientoService.deleteAsiento(asiento)
         }
         asientosRegistrados++
-        if(asientosRegistrados===(this.asientoLibre[0].length-1)*(this.asientoLibre.length-1)){
+        if (asientosRegistrados === (this.asientoLibre[0].length - 1) * (this.asientoLibre.length - 1)) {
           Swal.fire({
             icon: 'success',
             title: 'Enhorabuena!',
             text: 'Cambios guardados',
             showConfirmButton: false,
-            timer:1500
-          }).then(()=>{
-            this.router.navigate(['eventos',this.eventoId])
+            timer: 1500
+          }).then(() => {
+            this.router.navigate(['eventos', this.eventoId])
           })
         }
+
       })
+
     })
     
+    await this.asientoService.setEvento(this.eventoId, this.evento);
+  }
+  cambiarLabel(fila:number, columna:number){
+    console.log(this.asientoLibre[fila][columna])
   }
 }

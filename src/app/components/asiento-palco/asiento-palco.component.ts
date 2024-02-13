@@ -37,13 +37,13 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
       if (asiento.length > 0) {
         this.information = asiento[0]
 
-        let cont2 = parseInt(localStorage.getItem(this.information['zona']['nombreZona']) ?? '0');
+        let cont2 = parseInt(localStorage.getItem(this.information['nombreZona']) ?? '0');
         cont2++
         if (this.firstTime) {
           this.firstTime = false
           this.cont1 = cont2
         }
-        localStorage.setItem(this.information['zona']['nombreZona'], cont2.toString());
+        localStorage.setItem(this.information['nombreZona'], cont2.toString());
         this.vendedores = (await this.asientoService.getVendedores(this.information.evento)).docs
         if (this.information.vendedor != "null") {
           console.log(this.information)
@@ -85,12 +85,7 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
   }
 
   openModal(template: TemplateRef<any>) {
-
-    if (this.information['estado'] != "ocupado") {
-      this.cambiarEstado();
-
-    }
-    this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+    this.modalRef = this.modalService.show(template);
 
 
   }
@@ -124,5 +119,11 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
     }
 
 
+  }
+  liberar(){
+    this.information.estado="libre"
+    this.information.clienteEstado="null"
+    this.information.clienteUSer="null"
+    this.asientoService.actualizarAsiento(this.information)
   }
 }
